@@ -5,7 +5,7 @@ interface PostProviderProps {
   children: ReactNode
 }
 
-export const PostProvider = ({ children }: PostProviderProps) => {
+export const PostContextProvider = ({ children }: PostProviderProps) => {
   const [state, dispatch] = useReducer(postReducer, initialState)
   const contextMemo = useMemo(() => ({ state, dispatch }), [state])
   return (
