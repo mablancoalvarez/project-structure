@@ -1,17 +1,11 @@
-import { useEffect, use } from 'react'
+import { useEffect } from 'react'
 import { FetchClient } from '@api/fetchClient'
 import { API_BASE_URL, GET_POST_URL } from '@utils/constants'
-import { PostContext } from '@/context/PostContext'
-
-interface Post {
-  id: number
-  title: string
-  body: string
-  userId: number
-}
+import { usePostContext } from '@/context/PostContext'
+import { type Post } from '@/context/types/post.types'
 
 export const useLoadPost = () => {
-  const { dispatch } = use(PostContext)!
+  const { dispatch } = usePostContext()
 
   useEffect(() => {
     const loadPosts = async () => {

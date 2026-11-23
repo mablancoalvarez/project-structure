@@ -1,11 +1,11 @@
-import { useState, use } from 'react'
+import { useState } from 'react'
 import { useLoadPost } from '@/hooks'
-import { PostContext } from '@/context/PostContext'
+import { usePostContext } from '@/context/PostContext'
 
 export const PostList: React.FC = () => {
   useLoadPost()
 
-  const { state } = use(PostContext)!
+  const { state } = usePostContext()
   const [checkedPost, setCheckedPost] = useState<number[]>([])
 
   if (state.loading) return <div>Cargando posts...</div>

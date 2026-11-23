@@ -1,59 +1,45 @@
 import { usePostContext } from '@/context/PostContext'
+import { type Post } from '@/context/types/post.types'
 import { useState } from 'react'
 
-interface Post {
-  id: number
-  title: string
-  body: string
-  userId: number
-}
+const emptyForm = { title: '', body: '' }
+
 export const AddPost: React.FC = () => {
   const { dispatch } = usePostContext()
-  const [formData, setFormData] = useState({ title: '', body: '' })
+  const [formData, setFormData] = useState(emptyForm)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
-  const handleAddPost = (e: React.FormEvent) => {
-    e.preventDefault()
+
+  const handleAddPost = (event: React.FormEvent) => {
+    event.preventDefault()
+    const title = formData.title.trim()
+    const body = formData.body.trim()
+    if (!title || !body) return
+
     const newPost: Post = {
       id: Date.now(),
-      ...formData,
+      title,
+      body,
       userId: 1,
     }
-    console.log('newPost', newPost)
-    dispatch({
-      type: 'ADD_POST',
-      payload: newPost,
-    })
-    setFormData({ title: '', body: '' })
+    dispatch({ type: 'ADD_POST', payload: newPost })
+    setFormData(emptyForm)
   }
+
   return (
     <form onSubmit={handleAddPost}>
       <label>
-        {' '}
         title
-        <input
-          name='title'
-          type='textarea'
-          value={formData.title}
-          onChange={(e) => handleChange(e)}
-        />
+        <input name='title' type='text' value={formData.title} onChange={handleChange} />
       </label>
       <label>
         body
-        <input
-          name='body'
-          type='textarea'
-          value={formData.body}
-          onChange={(e) => handleChange(e)}
-        />
+        <textarea name='body' value={formData.body} onChange={handleChange} />
       </label>
-      <button type='submit'> Enviar new post</button>
+      <button type='submit'>Enviar new post</button>
     </form>
   )
 }
